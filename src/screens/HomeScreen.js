@@ -66,11 +66,7 @@ export default function HomeScreen({ navigation }) {
   </TouchableOpacity>
 
   {/* اللوجو المحلي — وسط */}
-<Image
-  source={require('../../assets/topicon.png')}
-  style={styles.logo}
-  resizeMode="contain"
-/>
+
   {/* أيقونة القائمة — يمين */}
   <TouchableOpacity>
     <Ionicons name="menu" size={28} color={COLORS.textDark} />
