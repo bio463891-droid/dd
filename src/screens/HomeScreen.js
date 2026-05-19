@@ -30,23 +30,18 @@ function TeacherCard({ teacher }) {
 function CourseCard({ course, onPress }) {
   return (
     <TouchableOpacity
-      style={[styles.courseCard, { borderLeftColor: course.color }]}
-      onPress={onPress}
-      activeOpacity={0.88}
-    >
-      <View style={[styles.courseEmoji, { backgroundColor: course.color + '22' }]}>
-        <Text style={{ fontSize: 32 }}>{course.emoji}</Text>
-      </View>
-      <View style={styles.courseInfo}>
-        <Text style={styles.courseTitle}>{course.title}</Text>
-        <Text style={styles.courseTeacher}>{course.teacher}</Text>
-        <View style={styles.courseMetaRow}>
-          <Ionicons name="play-circle-outline" size={14} color={COLORS.textMuted} />
-          <Text style={styles.courseMeta}> {course.lectures} محاضرة</Text>
-        </View>
-      </View>
-      <Ionicons name="chevron-back" size={20} color={COLORS.textMuted} />
-    </TouchableOpacity>
+  style={[styles.courseCard, { backgroundColor: course.color }]}
+  onPress={onPress}
+  activeOpacity={0.88}
+>
+  <Text style={styles.courseEmoji}>{course.emoji}</Text>
+  <Text style={styles.courseTitle}>{course.title}</Text>
+  <Text style={styles.courseTeacher}>{course.teacher}</Text>
+  <View style={styles.courseMetaRow}>
+    <Ionicons name="play-circle-outline" size={14} color={COLORS.white} />
+    <Text style={styles.courseMeta}> {course.lectures} محاضرة</Text>
+  </View>
+</TouchableOpacity>
   );
 }
 
@@ -66,7 +61,10 @@ export default function HomeScreen({ navigation }) {
   </TouchableOpacity>
 
   {/* اللوجو المحلي — وسط */}
-
+<Image
+  style={styles.logo}
+  resizeMode="contain"
+/>
   {/* أيقونة القائمة — يمين */}
   <TouchableOpacity>
     <Ionicons name="menu" size={28} color={COLORS.textDark} />
@@ -100,13 +98,24 @@ export default function HomeScreen({ navigation }) {
 
         {/* ── Courses Section ── */}
         <Text style={styles.sectionTitle}>الكورسات</Text>
-        {COURSES.map((course) => (
-          <CourseCard
-            key={course.id}
-            course={course}
-            onPress={() => navigation.navigate('CourseDetails', { course })}
-          />
-        ))}
+<FlatList
+  data={COURSES}
+  keyExtractor={(item) => item.id}
+  horizontal
+  inverted
+  showsHorizontalScrollIndicator={false}
+  snapToInterval={220}
+  decelerationRate="fast"
+  contentContainerStyle={styles.courseList}
+  renderItem={({ item }) => (
+    <CourseCard
+      course={item}
+      onPress={() => navigation.navigate('CourseDetails', { course: item })}
+    />
+  )}
+  scrollEnabled
+/>
+        
       </ScrollView>
 
       {/* ── Bottom Navigation ── */}
@@ -212,51 +221,50 @@ const styles = StyleSheet.create({
   },
 
   // Course Cards
-  courseCard: {
-    backgroundColor: COLORS.white,
-    borderRadius: 16,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    borderLeftWidth: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  courseEmoji: {
-    width: 56,
-    height: 56,
-    borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 14,
-  },
-  courseInfo: {
-    flex: 1,
-    alignItems: 'flex-end',
-  },
-  courseTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: COLORS.textDark,
-    textAlign: 'right',
-  },
-  courseTeacher: {
-    fontSize: 13,
-    color: COLORS.textMuted,
-    textAlign: 'right',
-    marginTop: 2,
-  },
-  courseMetaRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  courseMeta: {
-    fontSize: 12,
-    color: COLORS.textMuted,
-  },
+  courseList: {
+  gap: 16,
+  paddingRight: 4,
+  paddingBottom: 24,
+},
+courseCard: {
+  borderRadius: 20,
+  padding: 20,
+  width: 200,
+  height: 180,
+  justifyContent: 'space-between',
+  marginLeft: 4,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.15,
+  shadowRadius: 10,
+  elevation: 5,
+},
+courseEmoji: {
+  fontSize: 40,
+  textAlign: 'right',
+},
+courseTitle: {
+  fontSize: 16,
+  fontWeight: '800',
+  color: COLORS.white,
+  textAlign: 'right',
+  marginTop: 10,
+},
+courseTeacher: {
+  fontSize: 12,
+  color: 'rgba(255,255,255,0.75)',
+  textAlign: 'right',
+  marginTop: 4,
+},
+courseMetaRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginTop: 8,
+  alignSelf: 'flex-end',
+},
+courseMeta: {
+  fontSize: 12,
+  color: COLORS.white,
+  fontWeight: '600',
+},
 });
